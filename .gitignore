@@ -3,4 +3,3 @@ target/
 .vscode/
 *.iml
 .env
-.DS_Store
