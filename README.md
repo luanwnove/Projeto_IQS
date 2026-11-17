@@ -1,34 +1,78 @@
-# IQS — Aula 11: Análise Estática e Qualidade de Código
+# IQS — Aula 12: Documentação de Software
 
-Projeto Maven em Java 17 com refatoração por Strategy, testes JUnit 5 e configuração para análise SonarQube.
+Projeto acadêmico de documentação Java, REST e arquitetura. Esta versão mantém os exercícios Java da Aula 11 (`FinanceUtils`, `ImpostoStrategy` e `CalculadoraDesconto`) e incorpora uma API de pagamentos documentada.
 
-## Executar os testes
+## Requisitos
+
+- JDK 17 ou superior
+- Apache Maven 3.9 ou superior
+- VS Code com suporte a Java (opcional)
+
+Não é necessário instalar Docker, SonarQube ou banco de dados para realizar a Aula 12.
+
+## Instalação e teste
 
 ```powershell
 mvn.cmd clean verify
 ```
 
-## Analisar no SonarQube local
-
-Inicie o SonarQube com Docker e aguarde a inicialização:
+## Executar a API
 
 ```powershell
-docker run -d --name sonarqube -p 9000:9000 sonarqube:community
+mvn.cmd spring-boot:run
 ```
 
-Acesse http://localhost:9000, configure o projeto e gere um token de análise. No PowerShell:
+Acesse a documentação interativa: http://localhost:8080/swagger-ui.html
+
+A especificação OpenAPI está disponível em http://localhost:8080/v3/api-docs
+
+## Endpoints
+
+| Método | Endpoint | Comportamento |
+|---|---|---|
+| POST | `/pagamentos` | Cria pagamento (HTTP 201); retorna JSON e `Location` |
+| GET | `/pagamentos/{id}` | Consulta pagamento (HTTP 200 ou 404) |
+
+### Exemplo POST
 
 ```powershell
-$env:SONAR_TOKEN = "SEU_TOKEN"
-mvn.cmd clean verify sonar:sonar "-Dsonar.projectKey=iqs-aula-11" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=$env:SONAR_TOKEN"
+Invoke-RestMethod -Method Post -Uri http://localhost:8080/pagamentos -ContentType 'application/json' -Body '{"descricao":"Mensalidade","valor":150.00}'
 ```
 
-Não registre tokens no Git nem os inclua em capturas de tela.
+### Exemplo GET
 
-## Evidências da atividade
+```powershell
+Invoke-RestMethod -Uri http://localhost:8080/pagamentos/1
+```
 
-1. Print do terminal com testes e análise concluídos.
-2. Print do painel SonarQube com as métricas e o Quality Gate.
-3. Registre em relatório próprio quais classes foram analisadas, as métricas observadas e as mudanças feitas.
+O identificador depende dos pagamentos criados desde o início do processo.
 
-O material da Aula 11 propõe refatorar duas classes e configurar um Quality Gate mínimo. As métricas só podem ser confirmadas após a análise real no SonarQube.
+## Gerar documentação Java
+
+```powershell
+mvn.cmd javadoc:javadoc
+```
+
+Abra `target/site/apidocs/index.html` no navegador. A classe `Financeira` contém descrição, `@author`, `@version`, `@param`, `@return`, `@throws`, `@see` e exemplo com `{@code ...}`.
+
+## Gerar site Maven
+
+```powershell
+mvn.cmd site
+```
+
+Abra `target/site/index.html`. A geração do site é independente da execução do servidor REST.
+
+## Arquitetura
+
+Consulte [ARCHITECTURE.md](ARCHITECTURE.md) para o diagrama Mermaid e as decisões técnicas.
+
+## Evidências recomendadas
+
+1. Terminal: `BUILD SUCCESS` em `mvn.cmd clean verify`.
+2. Página de Javadoc: `target/site/apidocs/index.html`.
+3. Swagger UI mostrando `POST /pagamentos` e `GET /pagamentos/{id}`.
+4. Site Maven: `target/site/index.html` após `mvn.cmd site`.
+5. Diagrama Mermaid de `ARCHITECTURE.md` no GitHub.
+
+As capturas devem refletir execuções reais. Não inclua a pasta `target` no controle de versão.
