@@ -1,0 +1,23 @@
+name: User Story
+description: Planejamento de funcionalidade para o projeto final
+labels: [user-story]
+body:
+  - type: textarea
+    id: historia
+    attributes:
+      label: Historia do usuario
+      placeholder: Como cliente, quero buscar produtos por nome para encontrar itens rapidamente.
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Criterios de aceite
+      placeholder: Descreva o resultado esperado e os testes.
+    validations:
+      required: true
+  - type: textarea
+    id: tarefas
+    attributes:
+      label: Tarefas tecnicas
+      placeholder: Repository, Service, Controller, testes, documentacao.
